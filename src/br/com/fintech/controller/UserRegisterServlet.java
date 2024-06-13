@@ -1,8 +1,6 @@
 package br.com.fintech.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +13,7 @@ import br.com.fintech.dao.implementation.UserDao;
 import br.com.fintech.bean.DBException;
 import br.com.fintech.factory.DaoFactory;
 
-@WebServlet("/user-register")
+@WebServlet("/register-user")
 public class UserRegisterServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +27,6 @@ public class UserRegisterServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		try{
 			String name = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -38,7 +35,7 @@ public class UserRegisterServlet extends HttpServlet {
 			User user = new User(name, email, password); 
 			dao.createUser(user);
 			
-			request.setAttribute("msg", "Usuário cadastrado!");
+			request.setAttribute("msg", "Bem vindo!");
 		}catch(DBException db) {
 			db.printStackTrace();
 			request.setAttribute("erro", "Erro ao cadastrar");
@@ -46,6 +43,7 @@ public class UserRegisterServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("erro","Por favor, valide os dados");
 		}
+		
 		request.getRequestDispatcher("register-user.jsp").forward(request, response);
 	}
 
