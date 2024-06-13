@@ -2,6 +2,7 @@ package br.com.fintech.bean;
 
 public class DBException extends Exception {
 
+	
 	public DBException() {
 		super();
 		// TODO Auto-generated constructor stub
