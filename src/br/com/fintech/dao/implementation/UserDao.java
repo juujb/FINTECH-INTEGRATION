@@ -51,14 +51,12 @@ public class UserDao implements UserDaoInterface {
 		PreparedStatement stmt = null;
 		
 		try {
-			String query = "INSERT INTO T_USUARIO (CD_USUARIO, NM_USUARIO, DS_EMAIL, DS_SENHA, DS_CPF, DS_TELEFONE) VALUES (SQ_USUARIO.NEXTVAL, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO T_USUARIO (CD_USUARIO, NM_USUARIO, DS_EMAIL, DS_SENHA) VALUES (SQ_USUARIO.NEXTVAL, ?, ?, ?)";
 			stmt = connection.prepareStatement(query);
 			
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getEmail());
 			stmt.setString(3, user.getPassword());
-			stmt.setString(4, null);
-			stmt.setString(5, null);
 			
 			stmt.executeUpdate();
 		} catch (SQLException ex) {
