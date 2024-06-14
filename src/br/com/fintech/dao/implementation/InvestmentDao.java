@@ -120,6 +120,66 @@ public class InvestmentDao implements GenericDao<Investment> {
 		return investmentList;
 	}
 	
+	public ArrayList<Investment> getByWalletCode(int code) throws DBException {
+        connection = OracleConnectionManager.getInstance().getConnection();
+		PreparedStatement stmt = null;
+		var investmentList = new ArrayList<Investment>();
+		
+		try {
+			String query = "SELECT * FROM T_INVESTIMENTO WHERE CD_CARTEIRA = ?";
+			stmt = connection.prepareStatement(query);
+			
+			stmt.setInt(1, code);
+			
+			ResultSet rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				int investmentCode = rst.getInt(1);
+				int walletCode = rst.getInt(2);
+				int userCode = rst.getInt(3);
+				String description = rst.getString(4);
+				double value = rst.getDouble(5);
+				long createdDate = rst.getDate(6).getTime();
+				long efetivationDate = rst.getDate(7).getTime();
+				boolean fixed = rst.getBoolean(8);
+				String investmentType = rst.getString(9);
+	
+				try {
+					Investment investment = new Investment(
+							investmentCode, 
+							userCode, 
+							walletCode, 
+							value, 
+							description, 
+							fixed, 
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(efetivationDate), zoneOffset),
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(createdDate), zoneOffset),
+							investmentType
+					);
+					
+					investmentList.add(investment);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+					throw new DBException("Erro ao mapear investimento.");
+				}
+			}
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DBException("Erro ao listar investimentos.");
+		}finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				throw new DBException("Erro ao fechar conexão.");
+			}
+		}
+	
+		return investmentList;
+	}
+	
 	public void delete(int code) throws DBException {
         connection = OracleConnectionManager.getInstance().getConnection();
 		PreparedStatement stmt = null;

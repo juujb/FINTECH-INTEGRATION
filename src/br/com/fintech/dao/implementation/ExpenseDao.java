@@ -131,6 +131,71 @@ public class ExpenseDao implements GenericDao<Expense> {
 		return expenseList;
 	}
 	
+	public ArrayList<Expense> getByWalletCode(int code) throws DBException {
+        connection = OracleConnectionManager.getInstance().getConnection();
+		PreparedStatement stmt = null;
+		var expenseList = new ArrayList<Expense>();
+		
+		try {
+			String query = "SELECT * FROM T_DESPESA WHERE CD_CARTEIRA = ?";
+			stmt = connection.prepareStatement(query);
+			
+			stmt.setInt(1, code);
+			
+			ResultSet rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				int expenseCode = rst.getInt(1);
+				int walletCode = rst.getInt(2);
+				int userCode = rst.getInt(3);
+				String description = rst.getString(4);
+				double expenseValue = rst.getDouble(5);
+				int installments = rst.getInt(6);
+				long createdDate = rst.getDate(7).getTime();
+				long efetivationDate = rst.getDate(8).getTime();
+				long dueDate = rst.getDate(9).getTime();
+				boolean isFixed = rst.getBoolean(10);
+				boolean paidStatus = rst.getBoolean(11);
+	
+				try {
+					Expense expense = new Expense(
+							expenseCode,
+							userCode,
+							walletCode,
+							expenseValue,
+							description,
+							isFixed,
+							paidStatus,
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(efetivationDate), zoneOffset),
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(createdDate), zoneOffset),
+							installments,
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(dueDate), zoneOffset)
+					);
+					
+					expenseList.add(expense);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+					throw new DBException("Erro ao mapear despesa.");
+				}
+			}
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DBException("Erro ao listar despesas.");
+		}finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				throw new DBException("Erro ao fechar conexão.");
+			}
+		}
+	
+		
+		return expenseList;
+	}
+	
 	public void delete(int code) throws DBException {
         connection = OracleConnectionManager.getInstance().getConnection();
 		PreparedStatement stmt = null;

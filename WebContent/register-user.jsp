@@ -10,7 +10,7 @@
 <body>
 <div class="container">
 	<h1 class="text-center mt-3">Cadastro</h1>
-	<form action="register-user" method="post" class="mx-auto">
+	<form action="usuario" method="post" class="mx-auto">
 		<div class="form-group mb-3">
 			<label for="id-nome">Nome</label>
 			<input type="text" name="nome" id="id-nome" class="form-control">

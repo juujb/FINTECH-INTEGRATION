@@ -26,7 +26,7 @@
             
             <div class="form-row">
                 <div class="col-md-2 mb-3">
-                    <input type="date" name="expenseDate" class="form-control" placeholder="Data da Despesa" required>
+                    <input type="date" name="expenseDate" class="form-control" placeholder="Vencimento" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <input type="text" name="description" class="form-control" placeholder="Descrição" required>
@@ -59,7 +59,7 @@
         <table class="table">
             <thead class="thead-light">
                 <tr>
-                	<th>Data</th>
+                	<th>Vencimento</th>
                     <th>ID</th>
                     <th>Descrição</th>
                     <th>Valor</th>

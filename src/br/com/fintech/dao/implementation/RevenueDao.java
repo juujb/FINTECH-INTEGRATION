@@ -120,6 +120,66 @@ public class RevenueDao implements GenericDao<Revenue> {
 		return revenueList;
 	}
 	
+	public ArrayList<Revenue> getByWalletCode(int code) throws DBException {
+        connection = OracleConnectionManager.getInstance().getConnection();
+		PreparedStatement stmt = null;
+		var revenueList = new ArrayList<Revenue>();
+		
+		try {
+			String query = "SELECT * FROM T_RECEITA WHERE CD_CARTEIRA = ?";
+			stmt = connection.prepareStatement(query);
+			
+			stmt.setInt(1, code);
+			stmt = connection.prepareStatement(query);
+			ResultSet rst = stmt.executeQuery();
+			
+			while(rst.next()) {
+				int revenueCode = rst.getInt(1);
+				int walletCode = rst.getInt(2);
+				int userCode = rst.getInt(3);
+				String description = rst.getString(4);
+				double value = rst.getDouble(5);
+				long createdDate = rst.getDate(6).getTime();
+				long efetivationDate = rst.getDate(7).getTime();
+				boolean fixed = rst.getBoolean(8);
+				String typeOfEntry = rst.getString(9);
+	
+				try {
+					Revenue revenue = new Revenue(
+							revenueCode,
+							userCode, 
+							walletCode, 
+							value, 
+							description, 
+							fixed, 
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(efetivationDate), zoneOffset),
+							OffsetDateTime.ofInstant(Instant.ofEpochMilli(createdDate), zoneOffset),
+							typeOfEntry
+					);
+					
+					revenueList.add(revenue);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+					throw new DBException("Erro ao mapear receita.");
+				}
+			}
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DBException("Erro ao listar receitas.");
+		}finally {
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				throw new DBException("Erro ao fechar conexão.");
+			}
+		}
+	
+		return revenueList;
+	}
+	
 	public void delete(int code) throws DBException {
         connection = OracleConnectionManager.getInstance().getConnection();
 		PreparedStatement stmt = null;
