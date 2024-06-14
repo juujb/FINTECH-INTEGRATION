@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -44,11 +45,15 @@ public class ExpenseDao implements GenericDao<Expense> {
 			if (expense.getEfetivationDate() != null) {				
 				java.sql.Date efetivationDate = new java.sql.Date(expense.getEfetivationDate().toInstant().toEpochMilli());
 				stmt.setDate(7, efetivationDate);
+			 } else {
+			        stmt.setNull(7, Types.DATE);
 			}
 			
 			if (expense.getDueDate() != null) {				
 				java.sql.Date dueDate = new java.sql.Date(expense.getDueDate().toInstant().toEpochMilli());
-				stmt.setDate(8, dueDate);			
+				stmt.setDate(8, dueDate);
+			  } else {
+			        stmt.setNull(8, Types.DATE);
 			}
 			
 			stmt.setBoolean(9, expense.isFixed());

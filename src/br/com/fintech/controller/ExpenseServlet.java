@@ -39,6 +39,7 @@ public class ExpenseServlet extends HttpServlet {
             }
         }
 
+        // Sempre listar despesas após qualquer ação
         listExpenses(request, response);
     }
 
@@ -49,16 +50,28 @@ public class ExpenseServlet extends HttpServlet {
             int installments = Integer.parseInt(request.getParameter("installments"));
             boolean fixed = Boolean.parseBoolean(request.getParameter("fixed"));
             boolean paidStatus = Boolean.parseBoolean(request.getParameter("paidStatus"));
-            OffsetDateTime expenseDate = OffsetDateTime.parse(request.getParameter("expenseDate"));
+
+            String dateString = request.getParameter("expenseDate");
+            OffsetDateTime expenseDate = null;
+            if (dateString != null && !dateString.isEmpty()) {
+                String dateTimeString = dateString + "T00:00:00Z";
+                expenseDate = OffsetDateTime.parse(dateTimeString);
+            }
 
             Expense expense = new Expense(0, 0, value, description, fixed, paidStatus, null, installments, expenseDate);
             expenseDao.insert(expense);
 
+            request.setAttribute("success", "Despesa criada com sucesso");
+
         } catch (NumberFormatException | DBException | DateTimeParseException e) {
-            throw new ServletException("Erro ao criar despesa", e);
+            request.setAttribute("error", "Erro ao criar despesa: " + e.getMessage());
+            // Use logging para registrar o stack trace completo da exceção
+            e.printStackTrace();
+            // Re-encaminhe para a página de despesas com os atributos de erro
+            listExpenses(request, response);
         }
     }
-        
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
@@ -77,8 +90,7 @@ public class ExpenseServlet extends HttpServlet {
             request.setAttribute("error", "Erro ao listar despesas: " + e.getMessage());
         }
         
-        
-        request.getRequestDispatcher("/despesas.jsp").forward(request, response);
+        request.getRequestDispatcher("/expenses.jsp").forward(request, response);
     }
 
     private void deleteExpense(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
