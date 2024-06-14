@@ -13,7 +13,7 @@
 			<h1 class="mt-5 mb-4">JSP - FINTECH</h1>
 			<form class="form-group mb-3" action="login" method="post">
 		    	<input class="form-control mb-3" type="text" name="email" placeholder="E-mail">
-		        <input class="form-control mb-4" type="password" name="senha" placeholder="Senha">
+		        <input class="form-control mb-4" type="password" name="password" placeholder="Senha">
 		        <div class="row">
 			      	<button class="btn btn-outline-success mb-2" type="submit">Entrar</button>
 			      	<a class="btn btn-primary" href="register-user.jsp">Cadastre-se</a>

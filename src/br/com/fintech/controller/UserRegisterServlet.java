@@ -14,8 +14,8 @@ import br.com.fintech.dao.implementation.UserDao;
 import br.com.fintech.bean.DBException;
 import br.com.fintech.factory.DaoFactory;
 
-@WebServlet("/usuario")
-public class UserServlet extends HttpServlet {
+@WebServlet("/create-user")
+public class UserRegisterServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -28,16 +28,6 @@ public class UserServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-
-        if ("login".equals(action)) {
-            login(request, response);
-        }
-        
-		createUser(request, response);
-	}
-	
-	private void createUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
 			String name = request.getParameter("nome");
 			String email = request.getParameter("email");
@@ -46,32 +36,20 @@ public class UserServlet extends HttpServlet {
 			User user = new User(name, email, password); 
 			dao.createUser(user);
 			
-			request.setAttribute("msg", "Bem vindo!");
+			HttpSession session = request.getSession();
+			session.setAttribute("user", email);
+			request.setAttribute("msg", "Usuário criado com Sucesso!");
+			response.sendRedirect("login.jsp");
 		}catch(DBException db) {
 			db.printStackTrace();
 			request.setAttribute("erro", "Erro ao cadastrar");
+			request.getRequestDispatcher("create-user.jsp").forward(request, response);
 		}catch(Exception e){
 			e.printStackTrace();
 			request.setAttribute("erro","Por favor, valide os dados");
+			request.getRequestDispatcher("create-user.jsp").forward(request, response);
 		}
-		
-		request.getRequestDispatcher("register-user.jsp").forward(request, response);
-	}
 	
-	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		
-		User user = new User(email, password); 
-
-		if (dao.auth(user)) {
-			request.setAttribute("msg", "Bem vindo!");
-			HttpSession session = request.getSession();
-			session.setAttribute("user", email);
-		} else {
-			request.setAttribute("erro", "Usuário e/ou senha inválidos");
-		}
-			
-		request.getRequestDispatcher("login.jsp").forward(request, response);
 	}
+
 }

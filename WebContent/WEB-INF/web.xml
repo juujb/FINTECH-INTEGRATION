@@ -9,14 +9,6 @@
     <welcome-file>default.jsp</welcome-file>
     <welcome-file>default.htm</welcome-file> 
   </welcome-file-list>
-  <servlet>
-  	<servlet-name>create-user</servlet-name>
-  	<servlet-class>br.com.fintech.contoller.UserRegisterServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>create-user</servlet-name>
-  	<url-pattern>/create-user</url-pattern>
-  </servlet-mapping>
   <error-page>
         <error-code>404</error-code>
         <location>/erro404.jsp</location>

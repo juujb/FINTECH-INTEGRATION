@@ -9,9 +9,8 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Bem Vindos ao Fintech!</h1>
-			
-
+		<h1>Bem Vindo ao Fintech!</h1>
+		<h2>${user}</h2>
 	</div>
 <%@ include file="footer.jsp" %>
 </body>
