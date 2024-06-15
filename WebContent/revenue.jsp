@@ -27,25 +27,13 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#">FINTECH</a>
-    <div class="collapse navbar-collapse"></div>
-</nav>
-
+<%@ include file="menu.jsp" %>
 <div class="container">
-    <div class="row justify-content-end mb-4">
-        <div class="col-md-6 text-right">
-            <button class="btn btn-outline-primary mr-2" onclick="location.href='login.jsp'">Trocar Usuário</button>
-            <button class="btn btn-outline-secondary" onclick="location.href='#'">Acessar Carteira</button>
-        </div>
-    </div>
     <div class="row justify-content-center">
         <div class="col-md-6 content text-center">
-
             <div class="mt-4">
-                <h5>Receita de Banco</h5>
+                <h5>Receita s</h5>
                 <p>Aqui você pode visualizar, criar, editar e deletar suas receitas bancárias.</p>
-                <!-- Container para as receitas -->
                 <div id="receitas-container"></div>
             </div>
 

@@ -10,8 +10,8 @@ public class Revenue extends Transference {
         this.setTypeOfEntry(typeOfEntry);
     }
 	
-	public Revenue(int code, int userCode, int walletCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate, OffsetDateTime createdDate, String typeOfEntry) {
-		super(code, userCode, walletCode, value, description, fixed, efetivationDate, createdDate);
+	public Revenue(int code, int userCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate, OffsetDateTime createdDate, String typeOfEntry) {
+		super(code, userCode, value, description, fixed, efetivationDate, createdDate);
 		this.setTypeOfEntry(typeOfEntry);
 	}
  

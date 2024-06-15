@@ -3,7 +3,6 @@ package br.com.fintech.bean;
 import java.time.OffsetDateTime;
 
 public abstract class Transference extends AuditableDocument {
-	private int walletCode;
 	private int userCode;
 	private double value;
 	private OffsetDateTime efetivationDate;
@@ -17,19 +16,17 @@ public abstract class Transference extends AuditableDocument {
 		setFixed(fixed);
 	}
 	
-	public Transference(int code, int userCode, int walletCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate, OffsetDateTime createdDate) {
+	public Transference(int code, int userCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate, OffsetDateTime createdDate) {
 		super(code, createdDate);
 		setUserCode(userCode);
-		setWalletCode(walletCode);
 		setValue(value);
 		this.efetivationDate = efetivationDate;
 		setFixed(fixed);
 		setDescription(description);
 	}
 	
-	public Transference(int userCode, int walletCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate) {
+	public Transference(int userCode, double value, String description, boolean fixed, OffsetDateTime efetivationDate) {
 		setUserCode(userCode);
-		setWalletCode(walletCode);
 		setValue(value);
 		this.efetivationDate = efetivationDate;
 		setFixed(fixed);
@@ -67,14 +64,6 @@ public abstract class Transference extends AuditableDocument {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public int getWalletCode() {
-		return walletCode;
-	}
-
-	public void setWalletCode(int walletCode) {
-		this.walletCode = walletCode;
 	}
 
 	public int getUserCode() {

@@ -29,35 +29,34 @@ public class ExpenseDao implements GenericDao<Expense> {
 		PreparedStatement stmt = null;
 		
 		try {
-			String query = "INSERT INTO T_DESPESA (CD_DESPESA, CD_CARTEIRA, CD_USUARIO, DS_DESPESA, VL_DESPESA, NR_PARCELAS, DT_CRIACAO, DT_EFETIVACAO, DT_VENCIMENTO, ST_FIXA, ST_PAGA) VALUES (SQ_DESPESA.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO T_DESPESA (CD_DESPESA, CD_USUARIO, DS_DESPESA, VL_DESPESA, NR_PARCELAS, DT_CRIACAO, DT_EFETIVACAO, DT_VENCIMENTO, ST_FIXA, ST_PAGA) VALUES (SQ_DESPESA.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			stmt = connection.prepareStatement(query);
 			
-			stmt.setInt(1, expense.getWalletCode());
-			stmt.setInt(2, expense.getUserCode());
-			stmt.setString(3, expense.getDescription());
-			stmt.setDouble(4, expense.getValue());
-			stmt.setInt(5, expense.getInstallments());
+			stmt.setInt(1, expense.getUserCode());
+			stmt.setString(2, expense.getDescription());
+			stmt.setDouble(3, expense.getValue());
+			stmt.setInt(4, expense.getInstallments());
 			
 			Instant currentDate = java.time.OffsetDateTime.now(zoneOffset).toInstant();
 			java.sql.Date creationDate = new java.sql.Date(currentDate.toEpochMilli());
-			stmt.setDate(6, creationDate);
+			stmt.setDate(5, creationDate);
 			
 			if (expense.getEfetivationDate() != null) {				
 				java.sql.Date efetivationDate = new java.sql.Date(expense.getEfetivationDate().toInstant().toEpochMilli());
-				stmt.setDate(7, efetivationDate);
+				stmt.setDate(6, efetivationDate);
 			 } else {
-			        stmt.setNull(7, Types.DATE);
+			        stmt.setNull(6, Types.DATE);
 			}
 			
 			if (expense.getDueDate() != null) {				
 				java.sql.Date dueDate = new java.sql.Date(expense.getDueDate().toInstant().toEpochMilli());
-				stmt.setDate(8, dueDate);
+				stmt.setDate(7, dueDate);
 			  } else {
-			        stmt.setNull(8, Types.DATE);
+			        stmt.setNull(7, Types.DATE);
 			}
 			
-			stmt.setBoolean(9, expense.isFixed());
-			stmt.setBoolean(10, expense.getPaidStatus());
+			stmt.setBoolean(8, expense.isFixed());
+			stmt.setBoolean(9, expense.getPaidStatus());
 			
 			stmt.executeUpdate();
 		} catch (SQLException ex) {
@@ -86,22 +85,20 @@ public class ExpenseDao implements GenericDao<Expense> {
 			
 			while(rst.next()) {
 				int expenseCode = rst.getInt(1);
-				int walletCode = rst.getInt(2);
-				int userCode = rst.getInt(3);
-				String description = rst.getString(4);
-				double expenseValue = rst.getDouble(5);
-				int installments = rst.getInt(6);
-				long createdDate = rst.getDate(7).getTime();
-				long efetivationDate = rst.getDate(8).getTime();
-				long dueDate = rst.getDate(9).getTime();
-				boolean isFixed = rst.getBoolean(10);
-				boolean paidStatus = rst.getBoolean(11);
+				int userCode = rst.getInt(2);
+				String description = rst.getString(3);
+				double expenseValue = rst.getDouble(4);
+				int installments = rst.getInt(5);
+				long createdDate = rst.getDate(6).getTime();
+				long efetivationDate = rst.getDate(7).getTime();
+				long dueDate = rst.getDate(8).getTime();
+				boolean isFixed = rst.getBoolean(9);
+				boolean paidStatus = rst.getBoolean(10);
 	
 				try {
 					Expense expense = new Expense(
 							expenseCode,
 							userCode,
-							walletCode,
 							expenseValue,
 							description,
 							isFixed,
@@ -136,13 +133,13 @@ public class ExpenseDao implements GenericDao<Expense> {
 		return expenseList;
 	}
 	
-	public ArrayList<Expense> getByWalletCode(int code) throws DBException {
+	public ArrayList<Expense> getByUser(int code) throws DBException {
         connection = OracleConnectionManager.getInstance().getConnection();
 		PreparedStatement stmt = null;
 		var expenseList = new ArrayList<Expense>();
 		
 		try {
-			String query = "SELECT * FROM T_DESPESA WHERE CD_CARTEIRA = ?";
+			String query = "SELECT * FROM T_DESPESA WHERE CD_USUARIO = ?";
 			stmt = connection.prepareStatement(query);
 			
 			stmt.setInt(1, code);
@@ -151,22 +148,20 @@ public class ExpenseDao implements GenericDao<Expense> {
 			
 			while(rst.next()) {
 				int expenseCode = rst.getInt(1);
-				int walletCode = rst.getInt(2);
-				int userCode = rst.getInt(3);
-				String description = rst.getString(4);
-				double expenseValue = rst.getDouble(5);
-				int installments = rst.getInt(6);
-				long createdDate = rst.getDate(7).getTime();
-				long efetivationDate = rst.getDate(8).getTime();
-				long dueDate = rst.getDate(9).getTime();
-				boolean isFixed = rst.getBoolean(10);
-				boolean paidStatus = rst.getBoolean(11);
+				int userCode = rst.getInt(2);
+				String description = rst.getString(3);
+				double expenseValue = rst.getDouble(4);
+				int installments = rst.getInt(5);
+				long createdDate = rst.getDate(6).getTime();
+				long efetivationDate = rst.getDate(7).getTime();
+				long dueDate = rst.getDate(8).getTime();
+				boolean isFixed = rst.getBoolean(9);
+				boolean paidStatus = rst.getBoolean(10);
 	
 				try {
 					Expense expense = new Expense(
 							expenseCode,
 							userCode,
-							walletCode,
 							expenseValue,
 							description,
 							isFixed,

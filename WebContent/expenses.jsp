@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+	<%@ include file="menu.jsp" %>
     <div class="container">
         <h1>Despesas</h1>
 
@@ -25,11 +26,11 @@
             <div class="alert alert-danger" role="alert">${error}</div>
         </c:if>
 
-        <form action="despesas" method="post" class="mb-3">
+        <form action="expenses" method="post" class="mb-3">
             <input type="hidden" name="action" value="createExpense">
             <div class="form-row">
                 <div class="col-md-2 mb-3">
-                    <input type="date" name="expenseDate" class="form-control" placeholder="Vencimento" required>
+                    <input type="date" name="dueDate" class="form-control" placeholder="Vencimento" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <input type="text" name="description" class="form-control" placeholder="Descrição" required>
@@ -74,7 +75,7 @@
             <tbody>
                 <c:forEach var="expense" items="${expenses}">
                     <tr>
-                        <td>${expense.expenseDate}</td>
+                        <td>${expense.dueDate}</td>
                         <td>${expense.code}</td>
                         <td>${expense.description}</td>
                         <td>R$ ${expense.value}</td>
@@ -82,7 +83,7 @@
                         <td>${expense.fixed ? 'Sim' : 'Não'}</td>
                         <td>${expense.paidStatus ? 'Sim' : 'Não'}</td>
                         <td>
-                            <form class="delete-form" action="despesas" method="post">
+                            <form class="delete-form" action="expenses" method="post">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="code" value="${expense.code}">
                                 <button type="submit" class="btn btn-danger">Remover</button>

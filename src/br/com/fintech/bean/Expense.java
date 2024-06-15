@@ -13,15 +13,15 @@ public class Expense extends Transference {
 		setDueDate(dueDate);
 	}
 	
-	public Expense(int code, int userCode, int walletCode, double value, String description, boolean fixed, boolean paidStatus, OffsetDateTime efetivationDate, OffsetDateTime createdDate, int installments, OffsetDateTime dueDate) {
-		super(code, userCode, walletCode, value, description, fixed, efetivationDate, createdDate);
+	public Expense(int code, int userCode, double value, String description, boolean fixed, boolean paidStatus, OffsetDateTime efetivationDate, OffsetDateTime createdDate, int installments, OffsetDateTime dueDate) {
+		super(code, userCode, value, description, fixed, efetivationDate, createdDate);
 		setInstallments(installments);
 		setDueDate(dueDate);
 		setPaidStatus(paidStatus);
 	}
 	
-	public Expense(int userCode, int walletCode, double value, String description, boolean fixed, boolean paidStatus, OffsetDateTime efetivationDate, int installments, OffsetDateTime dueDate) {
-		super(userCode, walletCode, value, description, fixed, efetivationDate);
+	public Expense(int userCode, double value, String description, boolean fixed, boolean paidStatus, OffsetDateTime efetivationDate, int installments, OffsetDateTime dueDate) {
+		super(userCode, value, description, fixed, efetivationDate);
 		setInstallments(installments);
 		setDueDate(dueDate);
 		setPaidStatus(paidStatus);

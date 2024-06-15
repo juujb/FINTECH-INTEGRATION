@@ -28,25 +28,24 @@ public class RevenueDao implements GenericDao<Revenue> {
 		PreparedStatement stmt = null;
 		
 		try {
-			String query = "INSERT INTO T_RECEITA (CD_RECEITA, CD_CARTEIRA, CD_USUARIO, DS_RECEITA, VL_RECEITA, DT_CRIACAO, DT_EFETIVACAO, ST_FIXA, TP_ENTRADA) VALUES (SQ_RECEITA.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO T_RECEITA (CD_RECEITA, CD_USUARIO, DS_RECEITA, VL_RECEITA, DT_CRIACAO, DT_EFETIVACAO, ST_FIXA, TP_ENTRADA) VALUES (SQ_RECEITA.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
 			stmt = connection.prepareStatement(query);
 			
-			stmt.setInt(1, revenue.getWalletCode());
-			stmt.setInt(2, revenue.getUserCode());
-			stmt.setString(3, revenue.getDescription());
-			stmt.setDouble(4, revenue.getValue());
+			stmt.setInt(1, revenue.getUserCode());
+			stmt.setString(2, revenue.getDescription());
+			stmt.setDouble(3, revenue.getValue());
 			
 			Instant currentDate = java.time.OffsetDateTime.now(zoneOffset).toInstant();
 			java.sql.Date creationDate = new java.sql.Date(currentDate.toEpochMilli());
-			stmt.setDate(5, creationDate);
+			stmt.setDate(4, creationDate);
 			
 			if (revenue.getEfetivationDate() != null) {				
 				java.sql.Date efetivationDate = new java.sql.Date(revenue.getEfetivationDate().toInstant().toEpochMilli());
-				stmt.setDate(6, efetivationDate);
+				stmt.setDate(5, efetivationDate);
 			}
 			
-			stmt.setBoolean(7, revenue.isFixed());
-			stmt.setString(8, revenue.getTypeOfEntry());
+			stmt.setBoolean(6, revenue.isFixed());
+			stmt.setString(7, revenue.getTypeOfEntry());
 			
 			stmt.executeUpdate();
 		} catch (SQLException ex) {
@@ -75,20 +74,18 @@ public class RevenueDao implements GenericDao<Revenue> {
 			
 			while(rst.next()) {
 				int code = rst.getInt(1);
-				int walletCode = rst.getInt(2);
-				int userCode = rst.getInt(3);
-				String description = rst.getString(4);
-				double value = rst.getDouble(5);
-				long createdDate = rst.getDate(6).getTime();
-				long efetivationDate = rst.getDate(7).getTime();
-				boolean fixed = rst.getBoolean(8);
-				String typeOfEntry = rst.getString(9);
+				int userCode = rst.getInt(2);
+				String description = rst.getString(3);
+				double value = rst.getDouble(4);
+				long createdDate = rst.getDate(5).getTime();
+				long efetivationDate = rst.getDate(6).getTime();
+				boolean fixed = rst.getBoolean(7);
+				String typeOfEntry = rst.getString(8);
 	
 				try {
 					Revenue revenue = new Revenue(
 							code, 
 							userCode, 
-							walletCode, 
 							value, 
 							description, 
 							fixed, 
@@ -120,13 +117,13 @@ public class RevenueDao implements GenericDao<Revenue> {
 		return revenueList;
 	}
 	
-	public ArrayList<Revenue> getByWalletCode(int code) throws DBException {
+	public ArrayList<Revenue> getByUser(int code) throws DBException {
         connection = OracleConnectionManager.getInstance().getConnection();
 		PreparedStatement stmt = null;
 		var revenueList = new ArrayList<Revenue>();
 		
 		try {
-			String query = "SELECT * FROM T_RECEITA WHERE CD_CARTEIRA = ?";
+			String query = "SELECT * FROM T_RECEITA WHERE CD_USUARIO = ?";
 			stmt = connection.prepareStatement(query);
 			
 			stmt.setInt(1, code);
@@ -135,20 +132,18 @@ public class RevenueDao implements GenericDao<Revenue> {
 			
 			while(rst.next()) {
 				int revenueCode = rst.getInt(1);
-				int walletCode = rst.getInt(2);
-				int userCode = rst.getInt(3);
-				String description = rst.getString(4);
-				double value = rst.getDouble(5);
-				long createdDate = rst.getDate(6).getTime();
-				long efetivationDate = rst.getDate(7).getTime();
-				boolean fixed = rst.getBoolean(8);
-				String typeOfEntry = rst.getString(9);
+				int userCode = rst.getInt(2);
+				String description = rst.getString(3);
+				double value = rst.getDouble(4);
+				long createdDate = rst.getDate(5).getTime();
+				long efetivationDate = rst.getDate(6).getTime();
+				boolean fixed = rst.getBoolean(7);
+				String typeOfEntry = rst.getString(8);
 	
 				try {
 					Revenue revenue = new Revenue(
 							revenueCode,
 							userCode, 
-							walletCode, 
 							value, 
 							description, 
 							fixed, 
