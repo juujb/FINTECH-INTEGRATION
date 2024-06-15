@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 		<h1>Bem Vindo ao Fintech!</h1>
-		<h2>${user}</h2>
+		<h2>${userName}</h2>
 	</div>
 <%@ include file="footer.jsp" %>
 </body>

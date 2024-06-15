@@ -30,16 +30,21 @@ public class UserLoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
-		User user = new User(email, password); 
+		User loginUser = new User(email, password);
+		
+		User validatedUser = dao.auth(loginUser);
 
-		if (dao.auth(user)) {
+		if (validatedUser.getName() != null) {
 			request.setAttribute("msg", "Bem vindo!");
 			HttpSession session = request.getSession();
-			session.setAttribute("user", email);
+
+			session.setAttribute("userCode", validatedUser.getUserCode());
+			session.setAttribute("userName", validatedUser.getName());
+			
 			response.sendRedirect("home.jsp");
 		} else {
-			request.setAttribute("erro", "Usuário e/ou senha inválidos");
-			request.getRequestDispatcher("login.jsp").forward(request, response);
+			request.setAttribute("error", "Usuário e/ou senha inválidos");
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 	}
 	

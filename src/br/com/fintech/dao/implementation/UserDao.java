@@ -12,7 +12,7 @@ import br.com.fintech.dao.interfaces.UserDaoInterface;
 public class UserDao implements UserDaoInterface {
 	private Connection connection;
 
-	public boolean auth(User user) {
+	public User auth(User user) {
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -24,11 +24,16 @@ public class UserDao implements UserDaoInterface {
 			rs = stmt.executeQuery();
 
 			if (rs.next()){
+				int userCode = rs.getInt(1);
+				String name = rs.getString(2);
+				
+				User userAuth = new User(userCode, name, null, null);
+				
 				stmt.close();
 				rs.close();
 				connection.close();
 				
-				return true;
+				return userAuth;
 			}
 			
 		} catch (SQLException e) {
@@ -43,7 +48,7 @@ public class UserDao implements UserDaoInterface {
 			}
 		}
 		
-		return false;
+		return new User();
 	}
 
 	public void createUser(User user) throws DBException {

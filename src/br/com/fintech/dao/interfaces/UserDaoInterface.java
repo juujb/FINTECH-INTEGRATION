@@ -4,6 +4,6 @@ import br.com.fintech.bean.DBException;
 import br.com.fintech.bean.User;
 
 public interface UserDaoInterface {
-	boolean auth(User user) throws DBException;
+	User auth(User user) throws DBException;
 	void createUser(User user) throws DBException;
 }

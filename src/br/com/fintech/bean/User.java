@@ -8,6 +8,10 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+    	super();
+    }
+    
     public User (int userCode, String name, String email, String password) {
     	super();
         this.name = name;
